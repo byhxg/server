@@ -1,0 +1,25 @@
+version: "3.6"
+services:
+    php-fpm:
+        image: 5ii5cn/php73:latest
+        container_name: php73
+        ports:
+            - "9090:9000"
+            - "9501:9501"
+            - "9502:9502"
+            - "9503:9503"
+            - "9504:9504"
+        volumes:
+          - ../../www:/var/www/html
+          - ./conf/php.ini:/usr/local/etc/php/php.ini
+        stdin_open: true
+        tty: true
+        privileged: true
+        networks:
+            cache-network:
+              ipv4_address: 192.168.5.30
+
+networks:
+ cache-network:
+    external:
+       name: redis-network

@@ -1,0 +1,29 @@
+version: "3.6"
+services:
+  consulserver:
+     image: 5ii5cn/consul
+     container_name: consul
+     ports:
+         - "8300:8300"
+         - "8600:8600"
+         - "8500:8500"
+     command: agent  -server  -ui -data-dir /tmp/consul -node=ali -bootstrap-expect 1  -bind=0.0.0.0 -client=0.0.0.0 -node=server1
+#     entrypoint:
+#         - consul
+#         - agent
+#         - -server
+#         - -data-dir=/tmp/consuldata
+#         - -bind=0.0.0.0
+#         - -client=0.0.0.0
+#         - -ui
+     stdin_open: true
+     tty: true
+     privileged: true
+     networks:
+         cache-network:
+           ipv4_address: 192.168.5.51
+
+networks:
+ cache-network:
+    external:
+       name: redis-network
