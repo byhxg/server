@@ -1,9 +1,9 @@
 version: "3.6"
 services:
     nginx:
-        image: nginx
-#        build:
-#           context: ./ #路径
+        image: my_nginx
+        build:
+           context: ./ #路径
         container_name: nginx
         working_dir: /usr/local/nginx
         ports:
