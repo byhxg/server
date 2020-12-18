@@ -1,0 +1,27 @@
+{
+    "name": "5ii5cn/swocloud",
+    "authors": [
+        {
+            "name": "baoyin",
+            "email": "baoyin@5ii5.cn"
+        }
+    ],
+    "require": {
+        "5ii5cn/swoolestar": "dev-master",
+        "firebase/php-jwt": "^5.1"
+    },
+    "autoload":{
+        "psr-4":{
+            "SwoCloud\\":"./src/"
+        },
+        "files":[
+            "src/Supper/Helper.php"
+        ]
+    },
+    "repositories": {
+        "shineyork": {
+            "type": "path",
+            "url": "../swoolestar"
+        }
+    }
+}

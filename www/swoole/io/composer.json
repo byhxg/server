@@ -1,0 +1,21 @@
+{
+    "name": "php/io",
+    "description": "io test demo",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "baoyin",
+            "email": "baoyin@5ii5.cn"
+        }
+    ],
+    "autoload":{
+        "psr-4":{
+            "Php\\Io\\":"./src"
+        },
+        "files":[
+            "./common/Helper.php"
+        ]
+    },
+    "require": {}
+}

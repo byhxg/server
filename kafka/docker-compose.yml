@@ -1,0 +1,35 @@
+version: "3.6"
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+        - "2181:2181"
+    stdin_open: true
+    tty: true
+    privileged: true
+    networks:
+        cache-network:
+          ipv4_address: 192.168.5.50
+
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+        - "9092:9092"
+    stdin_open: true
+    tty: true
+    privileged: true
+    networks:
+        cache-network:
+          ipv4_address: 192.168.5.51
+    environment:
+        KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://:9092
+        KAFKA_LISTENERS: PLAINTEXT://:9092
+        KAFKA_ZOOKEEPER_CONNECT: 192.168.5.50:2181
+networks:
+ cache-network:
+    external:
+       name: redis-network
+
+

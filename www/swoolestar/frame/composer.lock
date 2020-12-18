@@ -1,0 +1,47 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "0c397c14485ea87ffa8d5382b20a04fe",
+    "packages": [
+        {
+            "name": "5ii5cn/swoolestar",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "../swoolestar",
+                "reference": "992e4d163c8cd7ec378369096d05ad2c7fe3eaa4",
+                "shasum": null
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SwooleStar\\": "./src"
+                },
+                "files": []
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "baoyin",
+                    "email": "baoyin@5ii5.cn"
+                }
+            ],
+            "description": "swoolestar 框架"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "5ii5cn/swoolestar": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

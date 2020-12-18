@@ -1,0 +1,45 @@
+
+#/bin/bash
+#1、创建redis-cluster镜像
+docker build -t redis-cluster:latest . --no-cache
+docker network create --subnet=192.168.5.0/24 redis-network
+mkdir master-1/{log,data}
+mkdir master-2/{log,data}
+mkdir master-3/{log,data}
+mkdir master-4/{log,data}
+mkdir slave-1/{log,data}
+mkdir slave-2/{log,data}
+mkdir slave-3/{log,data}
+mkdir slave-4/{log,data}
+docker-compose up -d
+docker exec -it redis-cluster-1 bash
+/usr/src/sh/redis-trib.rb create --replicas 1  192.168.5.11:6379 192.168.5.12:6379  192.168.5.13:6379 192.168.5.14:6379 192.168.5.15:6379 192.168.5.16:6379
+exit;
+
+
+
+如果 镜像为空时
+docker tag redis-cluster:latest
+
+#启动- start|关闭 stop
+docker-composer start
+
+
+#设置从节点 （-a从机密码 -h从机ip -p从机端口 replicate 主机节点）
+redis-cli -a 123456 -h 192.168.5.14  -p 6379  cluster replicate 72aa06d37077a7499379f74ff32794a85fed7249
+redis-cli -a 123456 -h 192.168.5.15  -p 6379  cluster replicate e9d99c446c93e2215f826de36af7afb024a0704a
+redis-cli -a 123456 -h 192.168.5.16  -p 6379  cluster replicate c98bc5abafd707e651d218a6c11301d4d40c7e2d
+
+#给主节点分配虚拟槽
+redis-cli -h 192.168.5.11 -p 6379 -a 123456 cluster addslots {0..5461}
+redis-cli -h 192.168.5.12 -p 6379  -a 123456 cluster addslots {5462..10922}
+redis-cli -h 192.168.5.13 -p 6379  -a 123456 cluster addslots {10923..16383}
+
+
+#忘记
+cluster reset
+
+#使用脚本大家集群：前一半（主节点ip）：端口。后一半（从节点ip：端口）
+./redis-trib.rb create --replicas 1  192.168.5.11:6379 192.168.5.12:6379  192.168.5.13:6379 192.168.5.14:6379 192.168.5.15:6379 192.168.5.16:6379
+
+./redis-trib.rb del-node 118.24.109.254:6390  cd7a5fac0dd8a0d90565342506914b5ad2bd5818

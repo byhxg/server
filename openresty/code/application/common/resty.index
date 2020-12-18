@@ -1,0 +1,26 @@
+# BEGIN lua-resty-consul
+
+dist lua-resty-consul-0.3.2
+  aliases resty.consul
+  modules lua-resty-consul-0.3.2
+
+module lua-resty-consul-0.3.2
+  aliases resty.consul
+  section 18 104 lua-resty-consul
+  section 104 2278 overview
+  section 2278 2390 dependencies
+  section 2390 4575 basic methods
+  section 2414 3162 new
+  section 3162 3513 get
+  section 3513 4083 put
+  section 4083 4440 delete
+  section 4440 4575 get_client_body_reader
+  section 4575 6303 key value helpers
+  section 4740 5066 get_key
+  section 5066 5587 put_key
+  section 5587 5881 delete
+  section 5881 6303 list_keys
+  section 6303 7433 transaction helper
+  section 6332 7433 txn
+
+# END lua-resty-consul

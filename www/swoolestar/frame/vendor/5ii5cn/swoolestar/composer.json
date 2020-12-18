@@ -1,0 +1,21 @@
+{
+    "name": "5ii5cn/swoolestar",
+    "description": "swoolestar 框架",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "baoyin",
+            "email": "baoyin@5ii5.cn"
+        }
+    ],
+    "autoload":{
+        "psr-4":{
+            "SwooleStar\\":"./src"
+        },
+        "files":[
+            "src/Supper/Helper.php"
+        ]
+    }
+
+}

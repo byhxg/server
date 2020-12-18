@@ -1,0 +1,9 @@
+<?php
+require dirname(__DIR__).'/vendor/autoload.php';
+// 加载更新
+// /d/composer/composer.phar require 5ii5cn/swoolestar:dev-master
+//项目目录
+define('APP_PATH',dirname(__DIR__));
+
+
+(new \SwooleStar\Foundation\Application())->run($argv);

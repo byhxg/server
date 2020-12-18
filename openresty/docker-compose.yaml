@@ -1,0 +1,57 @@
+version: "3.6"
+services:
+    nginx1:
+        image: openresty
+        container_name: nginx1
+        working_dir: /usr/local/openresty
+        extra_hosts:
+          - "centos_ip:192.168.0.88"
+        ports:
+          - "8001:80"
+        stdin_open: true
+        networks:
+           cache-network:
+              ipv4_address: 192.168.5.8
+        tty: true
+        privileged: true
+        volumes:
+            - ./conf/nginx/distribute:/usr/local/openresty/nginx/conf
+            - ./code/distribute:/usr/local/openresty/lualib/project
+    nginx2:
+        image: openresty
+        container_name: nginx2
+        working_dir: /usr/local/openresty
+        extra_hosts:
+            - "centos_ip:192.168.0.88"
+        ports:
+            - "8002:80"
+        stdin_open: true
+        networks:
+            cache-network:
+                ipv4_address: 192.168.5.9
+        tty: true
+        privileged: true
+        volumes:
+            - ./conf/nginx/application:/usr/local/openresty/nginx/conf
+            - ./code/application:/usr/local/openresty/lualib/project
+    nginx3:
+        image: openresty
+        container_name: nginx3
+        working_dir: /usr/local/openresty
+        extra_hosts:
+            - "centos_ip:192.168.0.88"
+        ports:
+            - "8003:80"
+        stdin_open: true
+        networks:
+            cache-network:
+                ipv4_address: 192.168.5.10
+        tty: true
+        privileged: true
+        volumes:
+            - ./conf/nginx/application:/usr/local/openresty/nginx/conf
+            - ./code/application:/usr/local/openresty/lualib/project
+networks:
+    cache-network:
+        external:
+            name: redis-network

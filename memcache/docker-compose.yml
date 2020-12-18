@@ -1,0 +1,18 @@
+version: "3.6"
+services:
+  memcache:
+    image: memcached
+    container_name: memcache
+    ports:
+        - "11211:11211"
+    stdin_open: true
+    tty: true
+    privileged: true
+    networks:
+        cache-network:
+          ipv4_address: 192.168.5.40
+
+networks:
+ cache-network:
+    external:
+       name: redis-network

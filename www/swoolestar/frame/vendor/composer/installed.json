@@ -1,0 +1,31 @@
+[
+    {
+        "name": "5ii5cn/swoolestar",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "dist": {
+            "type": "path",
+            "url": "../swoolestar",
+            "reference": "992e4d163c8cd7ec378369096d05ad2c7fe3eaa4",
+            "shasum": null
+        },
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "SwooleStar\\": "./src"
+            },
+            "files": []
+        },
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "baoyin",
+                "email": "baoyin@5ii5.cn"
+            }
+        ],
+        "description": "swoolestar 框架"
+    }
+]

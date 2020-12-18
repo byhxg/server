@@ -1,0 +1,172 @@
+version: "3.6"
+services:
+  redis1: #主节点
+    image: ${REDIS_IMAGE}
+    container_name: ${REDIS_NO1_CONTAINER_NAME}
+    ports: #端口映射
+      - "${REDIS_NO1_PORT1}:6379"
+      - "${REDIS_NO1_PORT2}:16379"
+    volumes: #映射目录
+      - ${REDIS_NO1_VOLUMES1}:/usr/src/redis
+    working_dir: ${REDIS_NO1_WORKINGDIR} #工作目录
+    stdin_open: true #标准输入输入出
+    tty: true #打开模终端
+    environment: #配置环境变量
+      - REALIP=${REDIS_NO1_ENV_REALIP}
+      - PORT=${REDIS_NO1_ENV_PORT1}
+      - PORT2=${REDIS_NO1_ENV_PORT2}
+    entrypoint:
+      - /bin/bash
+      - /usr/src/sh/cluster.sh
+    networks:
+      redis-network:
+        ipv4_address: ${REDIS_NO1_IPADDR}   #设置ip地址
+
+  redis2: #主节点
+    image: ${REDIS_IMAGE}
+    container_name: redis2
+    ports: #端口映射
+      - "6387:6379"
+      - "16387:16379"
+    volumes: #映射目录
+      - ${REDIS_ROOT_DIR}master-2:/usr/src/redis
+    working_dir: /usr/src/redis #工作目录
+    stdin_open: true #标准输入输入出
+    tty: true #打开模终端
+    environment: #配置环境变量
+      - REALIP=192.168.5.12
+      - PORT=6387
+      - PORT2=16387
+    entrypoint:
+      - /bin/bash
+      - /usr/src/sh/cluster.sh
+
+    networks:
+      redis-network:
+        ipv4_address: 192.168.5.12   #设置ip地址
+
+  redis3: #主节点
+    image:  ${REDIS_IMAGE}
+    container_name: redis3
+    ports: #端口映射
+      - "6388:6379"
+      - "16388:16379"
+    volumes: #映射目录
+      - ${REDIS_ROOT_DIR}master-3:/usr/src/redis
+    working_dir: /usr/src/redis #工作目录
+    stdin_open: true #标准输入输入出
+    tty: true #打开模终端
+    environment: #配置环境变量
+      - REALIP=192.168.5.13
+      - PORT=6388
+      - PORT2=16388
+    entrypoint:
+      - /bin/bash
+      - /usr/src/sh/cluster.sh
+
+    networks:
+      redis-network:
+        ipv4_address: 192.168.5.13   #设置ip地址
+
+  redis4: #主节点
+    image: ${REDIS_IMAGE}
+    container_name: redis4
+    ports: #端口映射
+      - "6396:6379"
+      - "16396:16379"
+    volumes: #映射目录
+      - ${REDIS_ROOT_DIR}slave-1:/usr/src/redis
+    working_dir: /usr/src/redis #工作目录
+    stdin_open: true #标准输入输入出
+    tty: true #打开模终端
+    environment: #配置环境变量
+      - REALIP=192.168.5.14
+      - PORT=6396
+      - PORT2=16396
+    entrypoint:
+      - /bin/sh
+      - /usr/src/sh/cluster.sh
+
+    networks:
+      redis-network:
+        ipv4_address: 192.168.5.14   #设置ip地址
+
+
+  redis5: #从节点
+    image:  ${REDIS_IMAGE}
+    container_name: redis5
+    ports: #端口映射
+      - "6397:6379"
+      - "16397:16379"
+    volumes: #映射目录
+      - ${REDIS_ROOT_DIR}slave-2:/usr/src/redis
+    working_dir: /usr/src/redis #工作目录
+    stdin_open: true #标准输入输入出
+    tty: true #打开模终端
+#    links: #初始化默认主节点
+#      - redis-master-2
+    environment: #配置环境变量
+      - REALIP=192.168.5.15
+      - PORT=6397
+      - PORT2=16397
+    entrypoint:
+      - /bin/sh
+      - /usr/src/sh/cluster.sh
+
+    networks:
+      redis-network:
+        ipv4_address: 192.168.5.15   #设置ip地址
+
+  redis6:
+    image:  ${REDIS_IMAGE}
+    container_name: redis6
+    ports: #端口映射
+      - "6398:6379"
+      - "16398:16379"
+    volumes: #映射目录
+      - ${REDIS_ROOT_DIR}slave-3:/usr/src/redis
+    working_dir: /usr/src/redis #工作目录
+    stdin_open: true #标准输入输入出
+    tty: true #打开模终端
+    environment: #配置环境变量
+      - REALIP=192.168.5.16
+      - PORT=6398
+      - PORT2=16398
+    entrypoint:
+      - /bin/sh
+      - /usr/src/sh/cluster.sh
+
+    #links:
+      #- redis3
+    networks:
+      redis-network:
+        ipv4_address: 192.168.5.16   #设置ip地址
+
+  redis0:
+      image:  ${REDIS_IMAGE}
+      container_name: redis0
+      ports: #端口映射
+        - "6399:6379"
+        - "16399:16379"
+      volumes: #映射目录
+        - ${REDIS_ROOT_DIR}redis:/usr/src/redis
+      working_dir: /usr/src/redis #工作目录
+      stdin_open: true #标准输入输入出
+      tty: true #打开模终端
+      environment: #配置环境变量
+        - REALIP=192.168.5.17
+        - PORT=6398
+        - PORT2=16398
+      entrypoint:
+        - /bin/sh
+        - /usr/src/sh/cluster.sh
+      networks:
+        redis-network:
+          ipv4_address: 192.168.5.17   #设置ip地址
+
+#设置网络环境
+networks:
+  #引用外部预先定义好的网段
+  redis-network:
+   external:
+      name: redis-network

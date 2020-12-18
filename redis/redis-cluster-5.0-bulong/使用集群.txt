@@ -1,0 +1,25 @@
+#/bin/bash
+#########增加布隆过滤器##############
+#1、创建网络
+docker network create --subnet=192.168.5.0/24 redis-network
+
+#2、创建redis-cluster镜像
+docker build -t redis-cluster-5.0-bulong . --no-cache
+
+#3、创建文件夹
+mkdir master-1/{log,data}
+mkdir master-2/{log,data}
+mkdir master-3/{log,data}
+mkdir master-4/{log,data}
+mkdir slave-1/{log,data}
+mkdir slave-2/{log,data}
+mkdir slave-3/{log,data}
+
+mkdir slave-4/{log,data}
+
+#4、启动容器
+docker-compose up -d
+
+#5、进入容器配置集群中添加节点
+docker exec -it redis-cluster-2 bash
+redis-cli -a 123456  --cluster create --cluster-replicas 1  192.168.5.11:6379 192.168.5.12:6379  192.168.5.13:6379 192.168.5.14:6379 192.168.5.15:6379 192.168.5.16:6379

@@ -1,0 +1,27 @@
+{
+    "name": "5ii5cn/swoolestar-frame",
+    "type": "library",
+    "authors": [
+        {
+            "name": "baoyin",
+            "email": "baoyin@5ii5.cn"
+        }
+    ],
+    "require": {
+        "php": ">7.0",
+        "firebase/php-jwt": "^5.1",
+        "5ii5cn/swoolestar": "dev-master"
+    },
+    "repositories": {
+        "SwooleStar": {
+            "type": "path",
+            "url": "../swoolestar"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Database\\": "database/"
+        }
+    }
+}
