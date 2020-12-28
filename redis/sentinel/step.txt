@@ -1,0 +1,179 @@
+1、定义外部网段
+docker network create --subnet=192.160.1.0/24 redis5sm
+
+2、创建镜像或直接运行即可
+    1）创建镜像
+        docker build -t redis .
+    2）运行主从
+         cd data/ && docker-compose up -d
+            #运行完看到以下数据
+                starting redis5_s_81 ... done
+                starting redis5_m_79 ... done
+                starting redis5_s_80 ... done
+    3）启动哨兵
+         cd sentinel/ && docker-compose up -d
+            #运行看到以下数据
+                Starting sentinel_179 ... done
+                Starting sentinel_180 ... done
+                Starting sentinel_181 ... done
+    4）查看运行是否正常
+        主服务器信息
+            127.0.0.1:6379> info  Replication
+            # Replication
+            role:master
+            connected_slaves:2
+            slave0:ip=192.160.1.79,port=6379,state=online,offset=11195967,lag=1
+            slave1:ip=192.160.1.80,port=6379,state=online,offset=11196107,lag=0
+            master_replid:a805e3ef2d151e7bee5c5c1cf501d9854bda85cb
+            master_replid2:5df405c4542f9ddf0756bcc94e02940e67bd9ea3
+            master_repl_offset:11196107
+            second_repl_offset:10174
+            repl_backlog_active:1
+            repl_backlog_size:1048576
+            repl_backlog_first_byte_offset:10147532
+            repl_backlog_histlen:1048576
+            127.0.0.1:6379>
+
+        从服务器信息
+            127.0.0.1:6379> info Replication
+            # Replication
+            role:slave
+            master_host:192.160.1.81
+            master_port:6379
+            master_link_status:up
+            master_last_io_seconds_ago:0
+            master_sync_in_progress:0
+            slave_repl_offset:11253885
+            slave_priority:100
+            slave_read_only:1
+            connected_slaves:0
+            master_replid:a805e3ef2d151e7bee5c5c1cf501d9854bda85cb
+            master_replid2:0000000000000000000000000000000000000000
+            master_repl_offset:11253885
+            second_repl_offset:-1
+            repl_backlog_active:1
+            repl_backlog_size:1048576
+            repl_backlog_first_byte_offset:10205310
+            repl_backlog_histlen:1048576
+
+            127.0.0.1:6379> info Replication
+            # Replication
+            role:slave
+            master_host:192.160.1.81
+            master_port:6379
+            master_link_status:up
+            master_last_io_seconds_ago:0
+            master_sync_in_progress:0
+            slave_repl_offset:11182863
+            slave_priority:100
+            slave_read_only:1
+            connected_slaves:0
+            master_replid:a805e3ef2d151e7bee5c5c1cf501d9854bda85cb
+            master_replid2:0000000000000000000000000000000000000000
+            master_repl_offset:11182863
+            second_repl_offset:-1
+            repl_backlog_active:1
+            repl_backlog_size:1048576
+            repl_backlog_first_byte_offset:10134288
+            repl_backlog_histlen:1048576
+
+    5）制造故障让服务自动转移
+        停止主服务
+            docker stop redis5_s_81
+
+        查看从服务变化日志
+            从服务1
+            #与主机的连接丢失。
+            # Connection with master lost.
+            *缓存断开连接的主机状态。
+            * Caching the disconnected master state.
+            *接主机192.160.1.81:6379
+            * Connecting to MASTER 192.160.1.81:6379
+            *主<->从服务同步已启动
+            * MASTER <-> REPLICA sync started
+            #正在将辅助复制ID设置为a805e3ef2d151e7bee5c5c1cf501d9854bda85cb，有效期不超过偏移量：11341680。新的复制ID是3b187a0582d01186dcd215e2331305aa314b3a1e
+            # Setting secondary replication ID to a805e3ef2d151e7bee5c5c1cf501d9854bda85cb, valid up to offset: 11341680. New replication ID is 3b187a0582d01186dcd215e2331305aa314b3a1e
+            *丢弃以前缓存的主状态。
+            * Discarding previously cached master state.
+            *主模式已启用（用户请求来自'id=19 addr=192.160.1.179:34479 fd=11 name=sentinel-2856a0f8-cmd age=54742 idle=0 flags=x db=0 sub=0 psub=0 multi=3 qbuf=281 qbuf free=32487 obl=36 oll=0 omem=0 events=r cmd=exec'）
+            * MASTER MODE enabled (user request from 'id=19 addr=192.160.1.179:34479 fd=11 name=sentinel-2856a0f8-cmd age=54742 idle=0 flags=x db=0 sub=0 psub=0 multi=3 qbuf=281 qbuf-free=32487 obl=36 oll=0 omem=0 events=r cmd=exec')
+            #配置重写已成功执行。
+            # CONFIG REWRITE executed with success.
+            *从服务192.160.1.80:6379请求同步
+            * Replica 192.160.1.80:6379 asks for synchronization
+            *已接受来自192.160.1.80:6379的部分重新同步请求。从偏移量11341680发送731字节的积压工作。
+
+            从服务2日志记录：
+            收到SIGTERM调度关闭。。。
+            Received SIGTERM scheduling shutdown...
+            #用户请求关闭。。。
+            # User requested shutdown...
+            *在退出RDB之前保存最终快照。
+            * Saving the final RDB snapshot before exiting.
+            *数据库保存在磁盘上
+            * DB saved on disk
+            *正在删除pid文件。
+            * Removing the pid file.
+            #Redis现在可以退出了，再见。。。
+            # Redis is now ready to exit, bye bye...
+            #与主机的连接丢失。
+            # Connection with master lost.
+            *缓存断开连接的主机状态。
+            * Caching the disconnected master state.
+            *接主机192.160.1.81:6379
+            * Connecting to MASTER 192.160.1.81:6379
+            *主<->从服务同步已启动
+            * MASTER <-> REPLICA sync started
+            *192.160.1.79:6379的复制已启用（用户请求来自'id=19 addr=192.160.1.179:51455 fd=10 name=sentinel-2856a0f8-cmd age=54564 idle=0 flags=x db=0 sub=0 psub=0 multi=3 qbuf=294 qbuf free=32474 obl=36 oll=0 omem=0 events=rcmd=exec'）
+            * REPLICAOF 192.160.1.79:6379 enabled (user request from 'id=19 addr=192.160.1.179:51455 fd=10 name=sentinel-2856a0f8-cmd age=54564 idle=0 flags=x db=0 sub=0 psub=0 multi=3 qbuf=294 qbuf-free=32474 obl=36 oll=0 omem=0 events=rcmd=exec')
+            #配置重写已成功执行。
+            # CONFIG REWRITE executed with success.
+            *连接主机192.160.1.79:6379
+            * Connecting to MASTER 192.160.1.79:6379
+            *主<->从服务同步已启动
+            * MASTER <-> REPLICA sync started
+            *同步的非阻塞连接触发了事件。
+            * Non blocking connect for SYNC fired the event.
+            *主机回复PING，复制可以继续。。。
+            * Master replied to PING, replication can continue...
+            *尝试部分重新同步（请求a805e3ef2d151e7bee5c5c1cf501d9854bda85cb:11341680）。
+            * Trying a partial resynchronization (request a805e3ef2d151e7bee5c5c1cf501d9854bda85cb:11341680).
+            *与主服务器的部分重新同步成功。
+            * Successful partial resynchronization with master.
+            #主复制ID更改为3b187a0582d01186dcd215e2331305aa314b3a1e
+            # Master replication ID changed to 3b187a0582d01186dcd215e2331305aa314b3a1e
+            *主机<->从服务同步：主机接受了部分重新同步。 
+            * MASTER <-> REPLICA sync: Master accepted a Partial Resynchronization.
+
+        从新恢复故障服务
+            主服务器收到日志
+                *从服务192.160.1.81:6379请求同步
+                * Replica 192.160.1.81:6379 asks for synchronization
+                *192.160.1.81:6379的部分重新同步请求已接受。从偏移量11341680开始发送134227字节的积压工作。
+                * Partial resynchronization request from 192.160.1.81:6379 accepted. Sending 134227 bytes of backlog starting from offset 11341680.
+
+            从服务器收到日志
+                服务器已初始化
+                Server initialized
+                *从磁盘加载的数据库：0.000秒
+                * DB loaded from disk: 0.000 seconds
+                *在转换为从服务之前，使用我的主参数来合成缓存的主服务器：我可以通过一次部分传输与新的主服务器同步。
+                * Before turning into a replica, using my master parameters to synthesize a cached master: I may be able to synchronize with the new master with just a partial transfer.
+                *准备接受连接
+                * Ready to accept connections
+                *连接主机192.160.1.79:6379
+                * Connecting to MASTER 192.160.1.79:6379
+                *主<->从服务同步已启动
+                * MASTER <-> REPLICA sync started
+                *同步的非阻塞连接触发了事件。
+                * Non blocking connect for SYNC fired the event.
+                *主机回复PING，复制可以继续。。。
+                * Master replied to PING, replication can continue...
+                *尝试部分重新同步（请求a805e3ef2d151e7bee5c5c1cf501d9854bda85cb:11341680）。
+                * Trying a partial resynchronization (request a805e3ef2d151e7bee5c5c1cf501d9854bda85cb:11341680).
+                *与主服务器的部分重新同步成功。
+                * Successful partial resynchronization with master.
+                #主复制ID更改为3b187a0582d01186dcd215e2331305aa314b3a1e
+                # Master replication ID changed to 3b187a0582d01186dcd215e2331305aa314b3a1e
+                *主机<->从服务同步：主机接受了部分重新同步。
+                * MASTER <-> REPLICA sync: Master accepted a Partial Resynchronization.

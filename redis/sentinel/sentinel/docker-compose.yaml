@@ -1,0 +1,51 @@
+# 编排php,redis,nginx容器
+version: "3.6" # 确定docker-composer文件的版本
+services: # 代表就是一组服务 - 简单来说一组容器
+  sentinel_179: # 这个表示服务的名称，课自定义; 注意不是容器名称
+    image: redis
+    build:
+      context: ./ #路径
+    networks: ## 引入外部预先定义的网段
+       redis5sm:
+         ipv4_address: 192.160.1.179   #设置ip地址
+    container_name: redis5_sent_179 # 这是容器的名称
+    ports: # 配置容器与宿主机的端口
+      - "26379:26379"
+    volumes: # 配置数据挂载
+        - ./sentinel_179:/redis
+    # command: top
+    command: /usr/local/bin/redis-sentinel /redis/conf/sentinel.conf
+  sentinel_180: # 这个表示服务的名称，课自定义; 注意不是容器名称
+    image: redis
+    build:
+      context: ./ #路径
+    networks: ## 引入外部预先定义的网段
+       redis5sm:
+         ipv4_address: 192.160.1.180   #设置ip地址
+    container_name: redis5_sent_180 # 这是容器的名称
+    ports: # 配置容器与宿主机的端口
+      - "26380:26379"
+    volumes: # 配置数据挂载
+        - ./sentinel_180:/redis
+    # command: top
+    command: /usr/local/bin/redis-sentinel /redis/conf/sentinel.conf
+  sentinel_181: # 这个表示服务的名称，课自定义; 注意不是容器名称
+    image: redis
+    build:
+      context: ./ #路径
+    networks: ## 引入外部预先定义的网段
+       redis5sm:
+         ipv4_address: 192.160.1.181   #设置ip地址
+    container_name: redis5_sent_181 # 这是容器的名称
+    ports: # 配置容器与宿主机的端口
+      - "26381:26379"
+    volumes: # 配置数据挂载
+        - ./sentinel_181:/redis
+    # command: top
+    command: /usr/local/bin/redis-sentinel /redis/conf/sentinel.conf
+# 网段设置
+networks:
+  #引用外部预先定义好的网段
+  redis5sm:
+    external:
+      name: redis5sm

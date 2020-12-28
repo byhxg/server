@@ -13,16 +13,16 @@ RUN mkdir -p /usr/src/redis \
       && mkdir -p /usr/src/redis/log
 
 
-RUN wget  -O /usr/src/redis/redis-5.0.5.tar.gz  "https://github.com/antirez/redis/archive/5.0.5.tar.gz" \
-   && tar -xzf /usr/src/redis/redis-5.0.5.tar.gz  -C /usr/src/redis \
-   && cp  /usr/src/redis/redis-5.0.5/src/redis-trib.rb  /usr/src/redis/ \
-   && rm -rf /usr/src/redis/redis-5.0.5.tar.tgz
+RUN wget  -O /usr/src/redis/redis-5.0.7.tar.gz  "https://github.com/antirez/redis/archive/5.0.7.tar.gz" \
+   && tar -xzf /usr/src/redis/redis-5.0.7.tar.gz  -C /usr/src/redis \
+   && cp  /usr/src/redis/redis-5.0.7/src/redis-trib.rb  /usr/src/redis/ \
+   && rm -rf /usr/src/redis/redis-5.0.7.tar.tgz
 
-RUN cd /usr/src/redis/redis-5.0.5 &&  make && make PREFIX=/usr/local/redis install \
-&& ln -s /usr/local/redis/bin/*  /usr/local/bin/  && rm -rf /usr/src/redis/redis-5.0.5
+RUN cd /usr/src/redis/redis-5.0.7 &&  make && make PREFIX=/usr/local/redis install \
+&& ln -s /usr/local/redis/bin/*  /usr/local/bin/  && rm -rf /usr/src/redis/redis-5.0.7
 
-COPY ./sh/cluster.sh   /usr/src/sh
 COPY ./module/   /usr/src/module/RedisBloom-2.0.3/
-
 RUN  cd  /usr/src/module/RedisBloom-2.0.3 &&  make
-RUN  chmod +x  /usr/src/sh/cluster.sh
+
+EXPOSE 6379
+CMD ["redis-server","/redis/conf/redis.conf","--loadmodule", "/usr/src/module/RedisBloom-2.0.3/redisbloom.so"]

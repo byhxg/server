@@ -1,0 +1,78 @@
+version: "3.6"
+services:
+  # -------- 主节点 --------
+  redis_m_150:
+    image: redis
+    build:
+      context: ./ #路径
+    networks:
+       redis5sm:
+         ipv4_address: 192.160.1.150
+    container_name: redis5_mc_150
+    stdin_open: true #标准输入输入出
+    tty: true #打开模终端
+    ports:
+      - "6100:6379"
+      - "16100:16379"
+    volumes:
+      - ./master_150:/redis
+    command: /usr/local/bin/redis-server /redis/conf/redis.conf
+
+  # -------- 从节点 --------
+  redis_s_120:
+    image: redis
+    build:
+      context: ./ #路径
+    networks:
+       redis5sm:
+         ipv4_address: 192.160.1.120
+    container_name: redis5_sc_120
+    stdin_open: true #标准输入输入出
+    tty: true #打开模终端
+    ports:
+        - "6010:6379"
+        - "16010:16379"
+    volumes:
+        - ./slave_120:/redis
+    command: /usr/local/bin/redis-server /redis/conf/redis.conf
+
+  redis_s_130:
+    image: redis
+    build:
+      context: ./ #路径
+    networks:
+       redis5sm:
+         ipv4_address: 192.160.1.130
+    container_name: redis5_sc_130
+    stdin_open: true #标准输入输入出
+    tty: true #打开模终端
+    ports:
+        - "6011:6379"
+        - "16011:16379"
+    volumes:
+        - ./slave_120:/redis
+    command: /usr/local/bin/redis-server /redis/conf/redis.conf
+
+  redis_s_140:
+    image: redis
+    build:
+      context: ./ #路径
+    networks:
+       redis5sm:
+         ipv4_address: 192.160.1.140
+    container_name: redis5_sc_140
+    stdin_open: true #标准输入输入出
+    tty: true #打开模终端
+    ports:
+        - "6012:6379"
+        - "16012:16379"
+    volumes:
+        - ./slave_120:/redis
+    command: /usr/local/bin/redis-server /redis/conf/redis.conf
+# 网段设置
+networks:
+  #引用外部预先定义好的网段
+  # docker network create --subnet=192.160.1.0/24 redis5sm
+  redis5sm:
+    external:
+      name: redis5sm

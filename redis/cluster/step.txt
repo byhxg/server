@@ -1,0 +1,69 @@
+1、定义外部网段
+docker network create --subnet=192.160.1.0/24 redis5sm
+
+2、创建镜像或直接运行即可
+    1）创建镜像
+        docker build -t redis .
+    2）运行主从
+        docker-compose up -d
+            #运行完看到以下数据
+                Stopping redis5_cluster_204   ... done
+                Stopping redis5_cluster_201   ... done
+                Stopping redis5_cluster_202   ... done
+                Stopping redis5_cluster_205   ... done
+                Stopping redis5_cluster_203   ... done
+                Stopping redis5_cluster_200   ... done
+    3）创建集群
+        docker exec -it redis5_cluster_200 bash
+        redis-cli --cluster create 192.160.1.200:6379 192.160.1.201:6379 192.160.1.202:6379 192.160.1.203:6379 192.160.1.204:6379 192.160.1.205:6379 --cluster-replicas 1
+            运行结果确认即可
+                >>> Performing hash slots allocation on 6 nodes...
+                Master[0] -> Slots 0 - 5460
+                Master[1] -> Slots 5461 - 10922
+                Master[2] -> Slots 10923 - 16383
+                Adding replica 192.160.1.204:6379 to 192.160.1.200:6379
+                Adding replica 192.160.1.205:6379 to 192.160.1.201:6379
+                Adding replica 192.160.1.203:6379 to 192.160.1.202:6379
+                M: 2d25d22cb019a0f994e81683eec14ec61b4d4796 192.160.1.200:6379
+                   slots:[0-5460] (5461 slots) master
+                M: 575a24d2cc3959a397cb6f115581637c5e8b2caf 192.160.1.201:6379
+                   slots:[5461-10922] (5462 slots) master
+                M: 3febebe302273d2fd37ca4551c50154667eb4ea9 192.160.1.202:6379
+                   slots:[10923-16383] (5461 slots) master
+                S: 895b1b2992de1bcfb8de5112d325a600194660e8 192.160.1.203:6379
+                   replicates 3febebe302273d2fd37ca4551c50154667eb4ea9
+                S: 985bbafe2329f16811cbdbf45633605e2a097167 192.160.1.204:6379
+                   replicates 2d25d22cb019a0f994e81683eec14ec61b4d4796
+                S: 73deec352070960422273469ac64322c9cbdc439 192.160.1.205:6379
+                   replicates 575a24d2cc3959a397cb6f115581637c5e8b2caf
+                Can I set the above configuration? (type 'yes' to accept): yes
+                >>> Nodes configuration updated
+                >>> Assign a different config epoch to each node
+                >>> Sending CLUSTER MEET messages to join the cluster
+                Waiting for the cluster to join
+                ...
+                >>> Performing Cluster Check (using node 192.160.1.200:6379)
+                M: 2d25d22cb019a0f994e81683eec14ec61b4d4796 192.160.1.200:6379
+                   slots:[0-5460] (5461 slots) master
+                   1 additional replica(s)
+                M: 3febebe302273d2fd37ca4551c50154667eb4ea9 192.160.1.202:6379
+                   slots:[10923-16383] (5461 slots) master
+                   1 additional replica(s)
+                S: 895b1b2992de1bcfb8de5112d325a600194660e8 192.160.1.203:6379
+                   slots: (0 slots) slave
+                   replicates 3febebe302273d2fd37ca4551c50154667eb4ea9
+                S: 985bbafe2329f16811cbdbf45633605e2a097167 192.160.1.204:6379
+                   slots: (0 slots) slave
+                   replicates 2d25d22cb019a0f994e81683eec14ec61b4d4796
+                M: 575a24d2cc3959a397cb6f115581637c5e8b2caf 192.160.1.201:6379
+                   slots:[5461-10922] (5462 slots) master
+                   1 additional replica(s)
+                S: 73deec352070960422273469ac64322c9cbdc439 192.160.1.205:6379
+                   slots: (0 slots) slave
+                   replicates 575a24d2cc3959a397cb6f115581637c5e8b2caf
+                [OK] All nodes agree about slots configuration.
+                >>> Check for open slots...
+                >>> Check slots coverage...
+                [OK] All 16384 slots covered.
+    4）故障转移
+        主节点挂了，从节点自动转移为主节点
