@@ -1,0 +1,42 @@
+# 编排php,redis,nginx容器
+version: "3.6" # 确定docker-composer文件的版本
+services: # 代表就是一组服务 - 简单来说一组容器
+  swoft_goods_server_172_110: # 这个表示服务的名称，课自定义; 注意不是容器名称
+    image: swoft  # 指定容器的镜像文件
+    container_name: swoft_goods_server_172_110 # 这是容器的名称
+    networks: ## 引入外部预先定义的网段
+      app_swoft:
+        ipv4_address: 172.200.7.110   #设置ip地址
+    volumes: # 配置数据挂载
+      - /www/wwwroot/2007_SRM/app/server/swoft:/var/www/swoft
+    working_dir: /var/www/swoft #工作目录
+    command: php bin/swoft rpc:start
+  swoft_goods_server_172_120: # 这个表示服务的名称，课自定义; 注意不是容器名称
+    image: swoft  # 指定容器的镜像文件
+    container_name: swoft_goods_server_172_120 # 这是容器的名称
+    networks: ## 引入外部预先定义的网段
+      app_swoft:
+        ipv4_address: 172.200.7.120   #设置ip地址
+    volumes: # 配置数据挂载
+      - /www/wwwroot/2007_SRM/app/server/swoft:/var/www/swoft
+    working_dir: /var/www/swoft #工作目录
+    command: php bin/swoft rpc:start
+  # swoft_goods_server_172_130: # 这个表示服务的名称，课自定义; 注意不是容器名称
+  #   image: swoft  # 指定容器的镜像文件
+  #   container_name: swoft_goods_server_172_110 # 这是容器的名称
+  #   networks: ## 引入外部预先定义的网段
+  #      app_swoft:
+  #        ipv4_address: 172.200.7.130   #设置ip地址
+  #   privileged: true # 执行特殊权限的命令
+  #   volumes: # 配置数据挂载
+  #       - /www/wwwroot/2007_SRM/app/server/swoft:/var/www/swoft
+  #   working_dir: /var/www/swoft #工作目录
+
+# 设置网络模块
+networks:
+  # 自定义网络
+  app_swoft:
+    driver: bridge
+    ipam: #定义网段
+      config:
+        - subnet: "172.200.7.0/24"

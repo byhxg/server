@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="abe6e95c-c66e-44a3-8e86-08a04615d6f7" name="github_byhxg_server" url="http://192.168.0.88">
+        <fileTransfer rootFolder="/opt" accessType="SFTP" host="192.168.0.88" port="22" sshConfigId="4fa068df-9445-4af8-ad1d-6dcfd8856075" sshConfig="root@192.168.0.88:22_pwd_baoyin1219">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
