@@ -17,9 +17,10 @@ services:
         privileged: true
         networks:
             cache-network:
-              ipv4_address: 192.168.5.30
+              ipv4_address: 192.160.1.50
 
 networks:
  cache-network:
     external:
-       name: redis-network
+      #name: redis-network
+      name: redis5sm
