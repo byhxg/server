@@ -1,0 +1,10 @@
+1、定义外部网段
+docker network create --subnet=192.160.1.0/24 redis5sm
+
+2、创建镜像或直接运行即可
+    1）创建镜像
+
+    2）运行主从
+        docker-compose up -d
+    3）创建集群
+

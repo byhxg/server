@@ -3,6 +3,8 @@ version: "3.6" # 确定docker-composer文件的版本
 services: # 代表就是一组服务 - 简单来说一组容器
   swoft_goods_server_172_110: # 这个表示服务的名称，课自定义; 注意不是容器名称
     image: swoft  # 指定容器的镜像文件
+    build:
+      context: ./ #路径 # 指定容器的镜像文件
     container_name: swoft_goods_server_172_110 # 这是容器的名称
     networks: ## 引入外部预先定义的网段
       app_swoft:
@@ -12,8 +14,10 @@ services: # 代表就是一组服务 - 简单来说一组容器
     working_dir: /var/www/swoft #工作目录
     command: php bin/swoft rpc:start
   swoft_goods_server_172_120: # 这个表示服务的名称，课自定义; 注意不是容器名称
+    build:
+      context: ./ #路径 # 指定容器的镜像文件
     image: swoft  # 指定容器的镜像文件
-    container_name: swoft_goods_server_172_120 # 这是容器的名称
+    container_name: swoft_goods_server_172_120 # 这·是容器的名称
     networks: ## 引入外部预先定义的网段
       app_swoft:
         ipv4_address: 172.200.7.120   #设置ip地址

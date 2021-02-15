@@ -1,29 +1,107 @@
 version: "3.6"
 services:
-  consulserver:
-     image: 5ii5cn/consul
-     container_name: consul
-     ports:
-         - "8300:8300"
-         - "8600:8600"
-         - "8500:8500"
-     command: agent  -server  -ui -data-dir /tmp/consul -node=ali -bootstrap-expect 1  -bind=0.0.0.0 -client=0.0.0.0 -node=server1
-#     entrypoint:
-#         - consul
-#         - agent
-#         - -server
-#         - -data-dir=/tmp/consuldata
-#         - -bind=0.0.0.0
-#         - -client=0.0.0.0
-#         - -ui
-     stdin_open: true
-     tty: true
-     privileged: true
-     networks:
-         cache-network:
-           ipv4_address: 192.168.5.51
+#  consulserver:
+#     image: 5ii5cn/consul
+#     container_name: consulserver
+#     ports:
+#         - "8300:8300"
+#         - "8600:8600"
+#         - "8500:8500"
+#     command: consul agent  -server  -ui -data-dir /tmp/consul -node=ali -bootstrap-expect 1  -bind=192.160.1.60 -client=0.0.0.0 -node=server1
+##     entrypoint:
+##         - consul
+##         - agent
+##         - -server
+##         - -data-dir=/tmp/consuldata
+##         - -bind=0.0.0.0
+##         - -client=0.0.0.0
+##         - -ui
+#     stdin_open: true
+#     tty: true
+#     privileged: true
+#     networks:
+#         cache-network:
+#           ipv4_address: 192.160.1.60
+
+  consul_master_server_170_30: # 这个表示服务的名称，课自定义; 注意不是容器名称
+    image: myconsul # 指定容器的镜像文件
+    build:
+      context: ./ #路径 # 指定容器的镜像文件
+    ports: # 配置容器与宿主机的端口
+      - "8530:8500"
+    networks: ## 引入外部预先定义的网段
+        cache-network:
+          ipv4_address: 192.160.1.30   #设置ip地址
+    container_name: consul_master_server_170_30 # 这是容器的名称
+    command: consul  agent -server -bootstrap-expect 3 -data-dir /tmp/consul -node=consul_master_server_170_30 -bind=192.160.1.30 -ui -client=0.0.0.0
+
+  consul_slaves_server_170_20: # 这个表示服务的名称，课自定义; 注意不是容器名称
+    image: myconsul # 指定容器的镜像文件
+    build:
+      context: ./ #路径 # 指定容器的镜像文
+    ports: # 配置容器与宿主机的端口
+      - "8520:8500"
+    links: #初始化默认主节点
+      - consul_master_server_170_30
+    networks: ## 引入外部预先定义的网段
+        cache-network:
+          ipv4_address: 192.160.1.20   #设置ip地址
+    container_name: consul_slaves_server_170_20 # 这是容器的名称
+    command: consul  agent -server -data-dir /tmp/consul -node=consul_slaves_server_170_20 -bind=192.160.1.20 -ui -client=0.0.0.0 -join 192.160.1.30
+
+  consul_slaves_server_170_10: # 这个表示服务的名称，课自定义; 注意不是容器名称
+    image: myconsul # 指定容器的镜像文件
+    build:
+      context: ./ #路径 # 指定容器的镜像文
+    links: #初始化默认主节点
+      - consul_master_server_170_30
+    ports: # 配置容器与宿主机的端口
+      - "8510:8500"
+    networks: ## 引入外部预先定义的网段
+        cache-network:
+          ipv4_address: 192.160.1.10   #设置ip地址
+    container_name: consul_slaves_server_170_10 # 这是容器的名称
+    command: consul  agent -server -data-dir /tmp/consul -node=consul_slaves_server_170_10 -bind=192.160.1.10 -ui -client=0.0.0.0 -join 192.160.1.30
+#    client
+  consul_client_170_50: # 这个表示服务的名称，课自定义; 注意不是容器名称
+    image: myconsul # 指定容器的镜像文件
+    build:
+      context: ./ #路径 # 指定容器的镜像文
+    links: #初始化默认主节点
+      - consul_master_server_170_30
+    ports: # 配置容器与宿主机的端口
+      - "8550:8500"
+    networks: ## 引入外部预先定义的网段
+        cache-network:
+          ipv4_address: 192.160.1.50   #设置ip地址
+    container_name: consul_client_170_50 # 这是容器的名称
+    command: consul  agent -data-dir /tmp/consul -node=consul_client_170_50 -bind=192.160.1.50 -ui -client=0.0.0.0 -join 192.160.1.30
+
+  consul_client_170_40: # 这个表示服务的名称，课自定义; 注意不是容器名称
+    image: myconsul # 指定容器的镜像文件
+    build:
+      context: ./ #路径 # 指定容器的镜像文
+    links: #初始化默认主节点
+      - consul_master_server_170_30
+    ports: # 配置容器与宿主机的端口
+      - "8540:8500"
+    networks: ## 引入外部预先定义的网段
+        cache-network:
+          ipv4_address: 192.160.1.40   #设置ip地址
+    container_name: consul_client_170_40 # 这是容器的名称
+    command: consul agent -data-dir /tmp/consul -node=consul_client_170_40 -bind=192.160.1.40 -ui -client=0.0.0.0 -join 192.160.1.30
 
 networks:
  cache-network:
     external:
-       name: redis-network
+       name: redis5sm
+
+# 设置网络模块
+#networks:
+#  # 自定义网络
+#  redis5sm:
+#    driver: bridge
+#    ipam: #定义网段
+#      config:
+#        - subnet: "192.160.1.0/24"
+

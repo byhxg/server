@@ -1,0 +1,74 @@
+# 编排php,redis,nginx容器
+version: "3.6" # 确定docker-composer文件的版本
+services: # 代表就是一组服务 - 简单来说一组容器
+  # server
+  rabbimq_server_172_3: # 这个表示服务的名称，课自定义; 注意不是容器名称
+    image: rabbitmq:3.7-management # 指定容器的镜像文件
+    ports: # 配置容器与宿主机的端口
+      - "15673:15672"
+      - "5673:5672"
+    networks: ## 引入外部预先定义的网段
+      rabbimq:
+        ipv4_address: 192.160.1.110 #设置ip地址
+    hostname: mq3
+    stdin_open: true
+    tty: true
+    privileged: true
+    extra_hosts:
+      - "mq2:192.160.1.111"
+      - "mq4:192.160.1.112"
+#    volumes:
+#      - "./3:/var/lib/rabbitmq"
+    container_name: rabbimq_server_172_3 # 这是容器的名称
+
+  rabbimq_server_172_2: # 这个表示服务的名称，课自定义; 注意不是容器名称
+    image: rabbitmq:3.7-management # 指定容器的镜像文件
+    ports: # 配置容器与宿主机的端口
+      - "15672:15672"
+      - "5672:5672"
+    networks: ## 引入外部预先定义的网段
+      rabbimq:
+        ipv4_address: 192.160.1.111 #设置ip地址
+    hostname: mq2
+#    links:
+#      - mq3
+    extra_hosts:
+      - "mq3:192.160.1.110"
+      - "mq4:192.160.1.112"
+#    volumes:
+#      - "./2:/var/lib/rabbitmq"
+    container_name: rabbimq_server_172_2 # 这是容器的名称
+
+  rabbimq_server_172_4: # 这个表示服务的名称，课自定义; 注意不是容器名称
+    image: rabbitmq:3.7-management # 指定容器的镜像文件
+    ports: # 配置容器与宿主机的端口
+      - "15674:15672"
+      - "5674:5672"
+    networks: ## 引入外部预先定义的网段
+      rabbimq:
+        ipv4_address: 192.160.1.112 #设置ip地址
+    hostname: mq4
+    extra_hosts:
+      - "mq2:192.160.1.111"
+      - "mq3:192.160.1.110"
+#    links:
+#      - mq3
+#    volumes:
+#      - "./4:/var/lib/rabbitmq"
+    container_name: rabbimq_server_172_4 # 这是容器的名称
+    # 设置网络模块
+
+
+networks:
+  rabbimq:
+    external:
+      name: redis5sm
+
+
+#networks:
+#  # 自定义网络
+#  rabbimq:
+#  driver: bridge
+#  ipam: #定义网段
+#  config:
+#    - subnet: "172.200.7.0/24"
