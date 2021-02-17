@@ -1,7 +1,9 @@
 version: "3.6"
 services:
     php-fpm:
-        image: 5ii5cn/php73:latest
+        #image: 5ii5cn/php73:latest
+        build:
+          context: ./ #路径
         container_name: php73
         ports:
             - "9000:9000"
