@@ -1,6 +1,6 @@
 FROM  alpine
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
-  && apk add  gcc g++ libc-dev  wget vim  openssl-dev make  linux-headers  bash \
+  && apk update && apk add  gcc g++ libc-dev  wget vim  openssl-dev make  linux-headers  bash \
   && rm -rf /var/cache/apk/*
 
 #通过选择更小的镜像，删除不必要文件清理不必要的安装缓存，从而瘦身镜像
