@@ -1,12 +1,12 @@
 version: "3.6" # 确定docker-composer文件的版本
 services: # 代表就是一组服务 - 简单来说一组容器
   redis_200: # 这个表示服务的名称，课自定义; 注意不是容器名称
-    image: redis
+    image: redis:6-alpine
     build:
       context: ./ #路径 # 指定容器的镜像文件
     networks: ## 引入外部预先定义的网段
        redis5sm:
-         ipv4_address: 192.160.1.200   #设置ip地址
+         ipv4_address: 192.160.2.200   #设置ip地址
     container_name: redis5_cluster_200 # 这是容器的名称
     ports: # 配置容器与宿主机的端口
       - "6320:6379" # php java python 语言连接
@@ -15,12 +15,12 @@ services: # 代表就是一组服务 - 简单来说一组容器
         - ./200:/redis
     command: /usr/local/bin/redis-server /redis/conf/redis.conf
   redis_201: # 这个表示服务的名称，课自定义; 注意不是容器名称
-    image: redis
+    image: redis:6-alpine
     build:
       context: ./ #路径 # 指定容器的镜像文件
     networks: ## 引入外部预先定义的网段
        redis5sm:
-         ipv4_address: 192.160.1.201   #设置ip地址
+         ipv4_address: 192.160.2.201   #设置ip地址
     container_name: redis5_cluster_201 # 这是容器的名称
     ports: # 配置容器与宿主机的端口
       - "6321:6379"
@@ -29,12 +29,12 @@ services: # 代表就是一组服务 - 简单来说一组容器
         - ./201:/redis
     command: /usr/local/bin/redis-server /redis/conf/redis.conf
   redis_202: # 这个表示服务的名称，课自定义; 注意不是容器名称
-    image: redis
+    image: redis:6-alpine
     build:
       context: ./ #路径 # 指定容器的镜像文件
     networks: ## 引入外部预先定义的网段
        redis5sm:
-         ipv4_address: 192.160.1.202   #设置ip地址
+         ipv4_address: 192.160.2.202   #设置ip地址
     container_name: redis5_cluster_202 # 这是容器的名称
     ports: # 配置容器与宿主机的端口
       - "6322:6379"
@@ -43,12 +43,12 @@ services: # 代表就是一组服务 - 简单来说一组容器
         - ./202:/redis
     command: /usr/local/bin/redis-server /redis/conf/redis.conf
   redis_203: # 这个表示服务的名称，课自定义; 注意不是容器名称
-    image: redis
+    image: redis:6-alpine
     build:
       context: ./ #路径 # 指定容器的镜像文件
     networks: ## 引入外部预先定义的网段
        redis5sm:
-         ipv4_address: 192.160.1.203   #设置ip地址
+         ipv4_address: 192.160.2.203   #设置ip地址
     container_name: redis5_cluster_203 # 这是容器的名称
     ports: # 配置容器与宿主机的端口
       - "6323:6379"
@@ -57,12 +57,12 @@ services: # 代表就是一组服务 - 简单来说一组容器
         - ./203:/redis
     command: /usr/local/bin/redis-server /redis/conf/redis.conf
   redis_204: # 这个表示服务的名称，课自定义; 注意不是容器名称
-    image: redis
+    image: redis:6-alpine
     build:
       context: ./ #路径 # 指定容器的镜像文件
     networks: ## 引入外部预先定义的网段
        redis5sm:
-         ipv4_address: 192.160.1.204   #设置ip地址
+         ipv4_address: 192.160.2.204   #设置ip地址
     container_name: redis5_cluster_204 # 这是容器的名称
     ports: # 配置容器与宿主机的端口
       - "6324:6379"
@@ -71,12 +71,12 @@ services: # 代表就是一组服务 - 简单来说一组容器
         - ./204:/redis
     command: /usr/local/bin/redis-server /redis/conf/redis.conf
   redis_205: # 这个表示服务的名称，课自定义; 注意不是容器名称
-    image: redis
+    image: redis:6-alpine
     build:
       context: ./ #路径 # 指定容器的镜像文件
     networks: ## 引入外部预先定义的网段
-       redis5sm:
-         ipv4_address: 192.160.1.205   #设置ip地址
+      redis5sm:
+         ipv4_address: 192.160.2.205   #设置ip地址
     container_name: redis5_cluster_205 # 这是容器的名称
     ports: # 配置容器与宿主机的端口
       - "6325:6379"
@@ -87,11 +87,11 @@ services: # 代表就是一组服务 - 简单来说一组容器
 # 网段设置
 networks:
   #引用外部预先定义好的网段
-#  redis5sm:
-#    driver: bridge
-#    ipam: #定义网段
-#      config:
-#        - subnet: "192.160.1.0/24"
   redis5sm:
+    driver: bridge
+    ipam: #定义网段
+      config:
+        - subnet: "192.160.2.0/16"
+  redis1sm:
     external:
       name: redis5sm
