@@ -1,0 +1,8 @@
+1、定义外部网段
+docker network create --subnet=192.160.1.0/24 redis5sm
+
+2、网段范围
+consul  192.160.1.5~10
+mysql   192.160.1.11~20
+php     192.160.1.50~60
+redis   192.160.1.200~210

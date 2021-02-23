@@ -12,12 +12,10 @@ services:
     privileged: true
     networks:
        cache-network:
-          ipv4_address: 192.168.2.20
+          ipv4_address: 192.160.1.20
     environment:
       MYSQL_ROOT_PASSWORD: "123456"
 networks:
  cache-network:
-    driver: bridge
-    ipam: #定义网段
-      config:
-        - subnet: "192.160.2.0/16"
+    external:
+       name: redis5sm

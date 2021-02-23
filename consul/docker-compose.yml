@@ -23,7 +23,7 @@ services:
 #         cache-network:
 #           ipv4_address: 192.160.1.60
 
-  consul_master_server_170_30: # 这个表示服务的名称，课自定义; 注意不是容器名称
+  consul_master_server_5: # 这个表示服务的名称，课自定义; 注意不是容器名称
     image: myconsul # 指定容器的镜像文件
     build:
       context: ./ #路径 # 指定容器的镜像文件
@@ -31,65 +31,65 @@ services:
       - "8530:8500"
     networks: ## 引入外部预先定义的网段
         cache-network:
-          ipv4_address: 192.160.1.30   #设置ip地址
-    container_name: consul_master_server_170_30 # 这是容器的名称
-    command: consul  agent -server -bootstrap-expect 3 -data-dir /tmp/consul -node=consul_master_server_170_30 -bind=192.160.1.30 -ui -client=0.0.0.0
+          ipv4_address: 192.160.1.5   #设置ip地址
+    container_name: consul_master_server_5 # 这是容器的名称
+    command: consul  agent -server -bootstrap-expect 3 -data-dir /tmp/consul -node=consul_master_server_5 -bind=192.160.1.5 -ui -client=0.0.0.0
 
-  consul_slaves_server_170_20: # 这个表示服务的名称，课自定义; 注意不是容器名称
+  consul_slaves_server_6: # 这个表示服务的名称，课自定义; 注意不是容器名称
     image: myconsul # 指定容器的镜像文件
     build:
       context: ./ #路径 # 指定容器的镜像文
     ports: # 配置容器与宿主机的端口
       - "8520:8500"
     links: #初始化默认主节点
-      - consul_master_server_170_30
+      - consul_master_server_5
     networks: ## 引入外部预先定义的网段
         cache-network:
-          ipv4_address: 192.160.1.20   #设置ip地址
-    container_name: consul_slaves_server_170_20 # 这是容器的名称
-    command: consul  agent -server -data-dir /tmp/consul -node=consul_slaves_server_170_20 -bind=192.160.1.20 -ui -client=0.0.0.0 -join 192.160.1.30
+          ipv4_address: 192.160.1.6   #设置ip地址
+    container_name: consul_slaves_server_6 # 这是容器的名称
+    command: consul  agent -server -data-dir /tmp/consul -node=consul_slaves_server_6 -bind=192.160.1.6 -ui -client=0.0.0.0 -join 192.160.1.5
 
-  consul_slaves_server_170_10: # 这个表示服务的名称，课自定义; 注意不是容器名称
+  consul_slaves_server_7: # 这个表示服务的名称，课自定义; 注意不是容器名称
     image: myconsul # 指定容器的镜像文件
     build:
       context: ./ #路径 # 指定容器的镜像文
     links: #初始化默认主节点
-      - consul_master_server_170_30
+      - consul_master_server_5
     ports: # 配置容器与宿主机的端口
       - "8510:8500"
     networks: ## 引入外部预先定义的网段
         cache-network:
-          ipv4_address: 192.160.1.10   #设置ip地址
-    container_name: consul_slaves_server_170_10 # 这是容器的名称
-    command: consul  agent -server -data-dir /tmp/consul -node=consul_slaves_server_170_10 -bind=192.160.1.10 -ui -client=0.0.0.0 -join 192.160.1.30
+          ipv4_address: 192.160.1.7   #设置ip地址
+    container_name: consul_slaves_server_7 # 这是容器的名称
+    command: consul  agent -server -data-dir /tmp/consul -node=consul_slaves_server_7 -bind=192.160.1.7 -ui -client=0.0.0.0 -join 192.160.1.5
 #    client
-  consul_client_170_50: # 这个表示服务的名称，课自定义; 注意不是容器名称
+  consul_client_8: # 这个表示服务的名称，课自定义; 注意不是容器名称
     image: myconsul # 指定容器的镜像文件
     build:
       context: ./ #路径 # 指定容器的镜像文
     links: #初始化默认主节点
-      - consul_master_server_170_30
+      - consul_master_server_5
     ports: # 配置容器与宿主机的端口
       - "8550:8500"
     networks: ## 引入外部预先定义的网段
         cache-network:
-          ipv4_address: 192.160.1.50   #设置ip地址
-    container_name: consul_client_170_50 # 这是容器的名称
-    command: consul  agent -data-dir /tmp/consul -node=consul_client_170_50 -bind=192.160.1.50 -ui -client=0.0.0.0 -join 192.160.1.30
+          ipv4_address: 192.160.1.8   #设置ip地址
+    container_name: consul_client_8 # 这是容器的名称
+    command: consul  agent -data-dir /tmp/consul -node=consul_client_8 -bind=192.160.1.8 -ui -client=0.0.0.0 -join 192.160.1.5
 
-  consul_client_170_40: # 这个表示服务的名称，课自定义; 注意不是容器名称
+  consul_client_9: # 这个表示服务的名称，课自定义; 注意不是容器名称
     image: myconsul # 指定容器的镜像文件
     build:
       context: ./ #路径 # 指定容器的镜像文
     links: #初始化默认主节点
-      - consul_master_server_170_30
+      - consul_master_server_5
     ports: # 配置容器与宿主机的端口
       - "8540:8500"
     networks: ## 引入外部预先定义的网段
         cache-network:
-          ipv4_address: 192.160.1.40   #设置ip地址
-    container_name: consul_client_170_40 # 这是容器的名称
-    command: consul agent -data-dir /tmp/consul -node=consul_client_170_40 -bind=192.160.1.40 -ui -client=0.0.0.0 -join 192.160.1.30
+          ipv4_address: 192.160.1.9   #设置ip地址
+    container_name: consul_client_9 # 这是容器的名称
+    command: consul agent -data-dir /tmp/consul -node=consul_client_9 -bind=192.160.1.9 -ui -client=0.0.0.0 -join 192.160.1.5
 
 networks:
  cache-network:
