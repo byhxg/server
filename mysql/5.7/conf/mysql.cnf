@@ -23,6 +23,11 @@ long_query_time         = 3
 slow-query-log-file     = /var/lib/mysql/mysql.slow.log
 log-error               = /var/lib/mysql/mysql.error.log
 
+server-id=1
+log_bin=mysql-bin
+;二进制日志格式
+binlog_format=MIXED
+
 default-time-zone       = '+8:00'
 
 [mysql]
