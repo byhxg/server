@@ -1,0 +1,64 @@
+<?php
+/**
+ * This file is part of Swoft.
+ *
+ * @link https://swoft.org
+ * @document https://doc.swoft.org
+ * @contact group@swoft.org
+ * @license https://github.com/swoft-cloud/swoft/blob/master/LICENSE
+ */
+
+namespace App\Services;
+
+use App\Lib\DemoInterface;
+use Swoft\Bean\Annotation\Enum;
+use Swoft\Bean\Annotation\Floats;
+use Swoft\Bean\Annotation\Number;
+use Swoft\Bean\Annotation\Strings;
+use Swoft\Rpc\Server\Bean\Annotation\Service;
+use Swoft\Core\ResultInterface;
+use Swoole\Mysql\Exception;
+
+/**
+ * Demo service
+ *
+ * @method ResultInterface deferGetUsers(array $ids)
+ * @method ResultInterface deferGetUser(string $id)
+ * @method ResultInterface deferGetUserByCond(int $type, int $uid, string $name, float $price, string $desc = "desc")
+ * @Service(version="1.0.1")
+ */
+class DemoServiceV2 implements DemoInterface
+{
+    public function getUsers(array $ids)
+    {
+        //throw  new Exception(123);
+        \Co::sleep(2); //网络Io
+        return [$ids, 'version'];
+    }
+
+    public function getUser(string $id)
+    {
+        //sleep();
+        \Co::sleep(2); //网络Io
+        return [$id, 'version'];
+    }
+
+    /**
+     * @Enum(name="type", values={1,2,3})
+     * @Number(name="uid", min=1, max=10)
+     * @Strings(name="name", min=2, max=5)
+     * @Floats(name="price", min=1.2, max=1.9)
+     *
+     * @param int    $type
+     * @param int    $uid
+     * @param string $name
+     * @param float  $price
+     * @param string $desc  default value
+     * @return array
+     */
+    public function getUserByCond(int $type, int $uid, string $name, float $price, string $desc = 'desc')
+    {
+        \Co::sleep(2); //网络IO
+        return [$type, $uid, $name, $price, $desc];
+    }
+}
