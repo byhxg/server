@@ -33,8 +33,8 @@ class Route extends Server
     public function onWorkerStart(SwooleServer $server, $worker_id)
     {
         //多个进程不能公用一个链接
-        $this->redis = new Redis;
-        $this->redis->pconnect("192.168.0.111", 6379);
+        $this->redis = new \Redis;
+        $this->redis->pconnect("192.160.2.205", 6379);
     }
 
     public function onOpen(SwooleServer $server, $request)

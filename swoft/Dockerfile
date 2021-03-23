@@ -1,2 +1,0 @@
-FROM swoft/alphp:fpm
-EXPOSE 18306 18307 18308 18309

@@ -84,9 +84,29 @@ services: # 代表就是一组服务 - 简单来说一组容器
     volumes: # 配置数据挂载
         - ./205:/redis
     command: /usr/local/bin/redis-server /redis/conf/redis.conf
+
+  redis_206: # 这个表示服务的名称，课自定义; 注意不是容器名称
+    image: redis:6-alpine
+    build:
+      context: ./ #路径 # 指定容器的镜像文件
+    networks: ## 引入外部预先定义的网段
+      redis5sm:
+        ipv4_address: 192.160.1.206   #设置ip地址
+    container_name: redis5_cluster_206 # 这是容器的名称
+    ports: # 配置容器与宿主机的端口
+      - "6326:6379"
+      - "16326:16379"
+    volumes: # 配置数据挂载
+      - ./206:/redis
+    command: /usr/local/bin/redis-server /redis/conf/redis.conf
 # 网段设置
 networks:
   #引用外部预先定义好的网段
+#  redis5sm:
+#    driver: bridge
+#    ipam: #定义网段
+#      config:
+#        - subnet: "192.160.1.0/16"
   redis5sm:
 #    driver: bridge
 #    ipam: #定义网段

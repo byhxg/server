@@ -86,5 +86,7 @@ RUN docker-php-ext-enable memcache && docker-php-ext-enable memcached
 
 RUN docker-php-ext-install -j$(nproc) bcmath calendar exif sockets dba shmop sysvmsg sysvsem sysvshm iconv  mysqli
 
+#切换镜像
+RUN  composer config -g repo.packagist composer https://packagist.laravel-china.org
 # xdebug  扩展
-RUN cd /tmp/ && wget http://xdebug.org/files/xdebug-2.7.2.tgz &&  pecl install xdebug-2.7.2.tgz && rm xdebug-2.7.2.tgz &&  docker-php-ext-enable xdebug
+#RUN cd /tmp/ && wget http://xdebug.org/files/xdebug-2.7.2.tgz &&  pecl install xdebug-2.7.2.tgz && rm xdebug-2.7.2.tgz &&  docker-php-ext-enable xdebug
