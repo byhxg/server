@@ -108,5 +108,9 @@ networks:
 #      config:
 #        - subnet: "192.160.1.0/16"
   redis5sm:
+#    driver: bridge
+#    ipam: #定义网段
+#      config:
+#        - subnet: "192.160.1.0/16"
     external:
       name: redis5sm
