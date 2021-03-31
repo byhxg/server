@@ -12,7 +12,7 @@ services:
         stdin_open: true
         networks:
            cache-network:
-              ipv4_address: 192.168.5.6
+              ipv4_address: 192.160.1.66
         tty: true
         privileged: true
         volumes:
@@ -21,4 +21,4 @@ services:
 networks:
     cache-network:
       external:
-         name: redis-network
+         name: redis5sm
