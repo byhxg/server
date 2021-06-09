@@ -19,12 +19,12 @@ class Inotify
      * @param callable $watchHandler 制定回掉函数
      * @param          $watchMask 参数
      */
-    public function __construct(callable $watchHandler, $watchMask = IN_CREATE | IN_DELETE | IN_MODIFY | IN_MOVE)
+    public function __construct(callable $watchHandler, $watchMask = \IN_CREATE | \IN_DELETE | \IN_MODIFY | \IN_MOVE)
     {
         if (!extension_loaded('inotify')) {
             exit;
         }
-        $this->fd = inotify_init();
+        $this->fd = \inotify_init();
         $this->watchPath = APP_PATH;
         $this->watchMask = $watchMask;
         $this->watchHandler = $watchHandler;
@@ -117,7 +117,7 @@ class Inotify
             }
 
             foreach ($events as $event) {
-                if ($event['mask'] == IN_IGNORED) {
+                if ($event['mask'] == \IN_IGNORED) {
                     continue;
                 }
 
