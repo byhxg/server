@@ -2,6 +2,7 @@
 
 1、通过 Composer 安装
 ```
+报错时可以切换阿里云镜像源
 composer create-project swoft/swoft swoft
 ```
 
@@ -13,11 +14,11 @@ composer install
 cp .env.example .env
 ```
 
-##配置 
+##二、配置 
 1、编辑 .env 文件，根据需要调整相关环境配置
 
 
-## Start
+## 三、运行
 
 - Http Server
 
@@ -48,10 +49,9 @@ cp .env.example .env
 ```bash
 [root@swoft swoft]# php bin/swoft process:start
 ```
-##目录结构
+##四、目录结构
 
-```angular2
-
+```
 ├── app/    ----- 应用代码目录
 │   ├── Annotation/        ----- 定义注解相关
 │   ├── Aspect/            ----- AOP 切面
@@ -80,7 +80,7 @@ cp .env.example .env
 │   │   └── Controller/        ----- TCP 服务处理控制器目录
 │   ├── Application.php    ----- 应用类文件继承自swoft核心
 │   ├── AutoLoader.php     ----- 项目扫描等信息(应用本身也算是一个组件)
-│   └── bean.php
+│   └── bean.php  相关服务配置：http、consul
 ├── bin/
 │   ├── bootstrap.php
 │   └── swoft              ----- Swoft 入口文件
@@ -98,4 +98,21 @@ cp .env.example .env
 ├── phar.build.inc
 └── phpunit.xml.dist
 ```
+##五、创建控制器
+####1、下载。。
+```
+wget https://github.com/swoft-cloud/swoft-cli/releases/download/v0.2.1/swoftcli.phar
+```
+
+####2、使用工具创建控制器
+
+```
+php bin/swoftcli.phar gen:http-controller index
+#创建完访问
+http://192.168.0.202:18306/index
+
+
+```
+
+
 

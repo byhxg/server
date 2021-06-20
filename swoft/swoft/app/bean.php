@@ -1,4 +1,5 @@
 <?php declare(strict_types=1);
+
 /**
  * This file is part of Swoft.
  *
@@ -22,46 +23,46 @@ use Swoft\Task\Swoole\TaskListener;
 use Swoft\WebSocket\Server\WebSocketServer;
 
 return [
-    'noticeHandler'      => [
+    'noticeHandler' => [
         'logFile' => '@runtime/logs/notice-%d{Y-m-d-H}.log',
     ],
     'applicationHandler' => [
         'logFile' => '@runtime/logs/error-%d{Y-m-d}.log',
     ],
-    'logger'             => [
+    'logger' => [
         'flushRequest' => false,
-        'enable'       => false,
-        'json'         => false,
+        'enable' => false,
+        'json' => false,
     ],
-    'httpServer'         => [
-        'class'    => HttpServer::class,
-        'port'     => 18306,
+    'httpServer' => [
+        'class' => HttpServer::class,
+        'port' => 18306,
         'listener' => [
             // 'rpc' => bean('rpcServer'),
             // 'tcp' => bean('tcpServer'),
         ],
-        'process'  => [
+        'process' => [
             // 'monitor' => bean(\App\Process\MonitorProcess::class)
             // 'crontab' => bean(CrontabProcess::class)
         ],
-        'on'       => [
+        'on' => [
             // SwooleEvent::TASK   => bean(SyncTaskListener::class),  // Enable sync task
-            SwooleEvent::TASK   => bean(TaskListener::class),  // Enable task must task and finish event
+            SwooleEvent::TASK => bean(TaskListener::class),  // Enable task must task and finish event
             SwooleEvent::FINISH => bean(FinishListener::class)
         ],
         /* @see HttpServer::$setting */
-        'setting'  => [
-            'task_worker_num'       => 12,
+        'setting' => [
+            'task_worker_num' => 12,
             'task_enable_coroutine' => true,
-            'worker_num'            => 6,
+            'worker_num' => 6,
             // static handle
             // 'enable_static_handler'    => true,
             // 'document_root'            => dirname(__DIR__) . '/public',
         ]
     ],
-    'httpDispatcher'     => [
+    'httpDispatcher' => [
         // Add global http middleware
-        'middlewares'      => [
+        'middlewares' => [
             \App\Http\Middleware\FavIconMiddleware::class,
             \Swoft\Http\Session\SessionMiddleware::class,
             // \Swoft\Whoops\WhoopsMiddleware::class,
@@ -72,92 +73,92 @@ return [
             \Swoft\Http\Server\Middleware\ValidatorMiddleware::class
         ]
     ],
-    'db'                 => [
-        'class'    => Database::class,
-        'dsn'      => 'mysql:dbname=test;host=127.0.0.1',
+    'db' => [
+        'class' => Database::class,
+        'dsn' => 'mysql:dbname=test;host=127.0.0.1',
         'username' => 'root',
         'password' => 'swoft123456',
-        'charset'  => 'utf8mb4',
+        'charset' => 'utf8mb4',
     ],
-    'db2'                => [
-        'class'    => Database::class,
-        'dsn'      => 'mysql:dbname=test2;host=127.0.0.1',
+    'db2' => [
+        'class' => Database::class,
+        'dsn' => 'mysql:dbname=test2;host=127.0.0.1',
         'username' => 'root',
         'password' => 'swoft123456',
-        'charset'  => 'utf8mb4',
+        'charset' => 'utf8mb4',
         //        'dbSelector' => bean(DbSelector::class)
     ],
-    'db2.pool'           => [
-        'class'    => Pool::class,
+    'db2.pool' => [
+        'class' => Pool::class,
         'database' => bean('db2'),
     ],
-    'db3'                => [
-        'class'    => Database::class,
-        'dsn'      => 'mysql:dbname=test2;host=127.0.0.1',
+    'db3' => [
+        'class' => Database::class,
+        'dsn' => 'mysql:dbname=test2;host=127.0.0.1',
         'username' => 'root',
         'password' => 'swoft123456',
-        'charset'  => 'utf8mb4',
+        'charset' => 'utf8mb4',
     ],
-    'db3.pool'           => [
-        'class'    => Pool::class,
+    'db3.pool' => [
+        'class' => Pool::class,
         'database' => bean('db3')
     ],
-    'migrationManager'   => [
+    'migrationManager' => [
         'migrationPath' => '@database/Migration',
     ],
-    'redis'              => [
-        'class'    => RedisDb::class,
-        'host'     => '127.0.0.1',
-        'port'     => 6379,
+    'redis' => [
+        'class' => RedisDb::class,
+        'host' => '127.0.0.1',
+        'port' => 6379,
         'database' => 0,
-        'option'   => [
+        'option' => [
             'prefix' => 'swoft:'
         ]
     ],
-    'user'               => [
-        'class'   => ServiceClient::class,
-        'host'    => '127.0.0.1',
-        'port'    => 18307,
+    'user' => [
+        'class' => ServiceClient::class,
+        'host' => '127.0.0.1',
+        'port' => 18307,
         'setting' => [
-            'timeout'         => 0.5,
+            'timeout' => 0.5,
             'connect_timeout' => 1.0,
-            'write_timeout'   => 10.0,
-            'read_timeout'    => 0.5,
+            'write_timeout' => 10.0,
+            'read_timeout' => 0.5,
         ],
-        'packet'  => bean('rpcClientPacket')
+        'packet' => bean('rpcClientPacket')
     ],
-    'user.pool'          => [
-        'class'  => ServicePool::class,
+    'user.pool' => [
+        'class' => ServicePool::class,
         'client' => bean('user'),
     ],
-    'rpcServer'          => [
+    'rpcServer' => [
         'class' => ServiceServer::class,
         'listener' => [
             'http' => bean('httpServer'),
         ]
     ],
-    'wsServer'           => [
-        'class'    => WebSocketServer::class,
-        'port'     => 18308,
+    'wsServer' => [
+        'class' => WebSocketServer::class,
+        'port' => 18308,
         'listener' => [
             'rpc' => bean('rpcServer'),
             // 'tcp' => bean('tcpServer'),
         ],
-        'on'       => [
+        'on' => [
             // Enable http handle
             SwooleEvent::REQUEST => bean(RequestListener::class),
             // Enable task must add task and finish event
-            SwooleEvent::TASK    => bean(TaskListener::class),
-            SwooleEvent::FINISH  => bean(FinishListener::class)
+            SwooleEvent::TASK => bean(TaskListener::class),
+            SwooleEvent::FINISH => bean(FinishListener::class)
         ],
-        'debug'    => 1,
+        'debug' => 1,
         // 'debug'   => env('SWOFT_DEBUG', 0),
         /* @see WebSocketServer::$setting */
-        'setting'  => [
-            'task_worker_num'       => 6,
+        'setting' => [
+            'task_worker_num' => 6,
             'task_enable_coroutine' => true,
-            'worker_num'            => 6,
-            'log_file'              => alias('@runtime/swoole.log'),
+            'worker_num' => 6,
+            'log_file' => alias('@runtime/swoole.log'),
             // 'open_websocket_close_frame' => true,
         ],
     ],
@@ -168,28 +169,30 @@ return [
     //     'class' => \Swoft\Session\SwooleStorage::class,
     // ],
     /** @see \Swoft\WebSocket\Server\WsMessageDispatcher */
-    'wsMsgDispatcher'    => [
+    'wsMsgDispatcher' => [
         'middlewares' => [
             \App\WebSocket\Middleware\GlobalWsMiddleware::class
         ],
     ],
     /** @see \Swoft\Tcp\Server\TcpServer */
-    'tcpServer'          => [
-        'port'  => 18309,
+    'tcpServer' => [
+        'port' => 18309,
         'debug' => 1,
     ],
     /** @see \Swoft\Tcp\Protocol */
-    'tcpServerProtocol'  => [
+    'tcpServerProtocol' => [
         // 'type' => \Swoft\Tcp\Packer\JsonPacker::TYPE,
         'type' => \Swoft\Tcp\Packer\SimpleTokenPacker::TYPE,
         // 'openLengthCheck' => true,
     ],
     /** @see \Swoft\Tcp\Server\TcpDispatcher */
-    'tcpDispatcher'      => [
+    'tcpDispatcher' => [
         'middlewares' => [
             \App\Tcp\Middleware\GlobalTcpMiddleware::class
         ],
     ],
-    'cliRouter'          => [// 'disabledGroups' => ['demo', 'test'],
+    'cliRouter' => [// 'disabledGroups' => ['demo', 'test'],
     ],
+
+    'consul' => ['host' => '192.160.1.9', 'port' => '8500']
 ];

@@ -19,6 +19,7 @@ services: # 代表就是一组服务 - 简单来说一组容器
       - ./conf/php.ini:/usr/local/etc/php/php.ini
     stdin_open: true
     tty: true
+    working_dir: /var/www/html/swoft/bin/
     privileged: true
     networks:
       app_swoft:
