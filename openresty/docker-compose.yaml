@@ -2,6 +2,8 @@ version: "3.6"
 services:
     nginx1:
         image: openresty
+        build:
+            context: ./ #路径
         container_name: nginx1
         working_dir: /usr/local/openresty
         extra_hosts:
@@ -19,6 +21,8 @@ services:
             - ./code/distribute:/usr/local/openresty/lualib/project
     nginx2:
         image: openresty
+        build:
+            context: ./ #路径
         container_name: nginx2
         working_dir: /usr/local/openresty
         extra_hosts:
@@ -36,6 +40,8 @@ services:
             - ./code/application:/usr/local/openresty/lualib/project
     nginx3:
         image: openresty
+        build:
+            context: ./ #路径
         container_name: nginx3
         working_dir: /usr/local/openresty
         extra_hosts:
