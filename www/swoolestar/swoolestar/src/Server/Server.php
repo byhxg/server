@@ -150,11 +150,11 @@ abstract class Server
         return function($event){
             $action = 'file:';
             switch ($event['mask']) {
-                case IN_CREATE:
+                case \IN_CREATE:
                     $action = 'IN_CREATE';
                     break;
 
-                case IN_DELETE:
+                case \IN_DELETE:
                     $action = 'IN_DELETE';
                     break;
                 case \IN_MODIFY:
@@ -207,8 +207,11 @@ abstract class Server
             'id'  => $worker_id,
             'pid' => $server->worker_id
         ];
-        $this->redis = new Redis;
-        $this->redis->pconnect("192.168.0.111", 6379);
+        $this->redis = new \Redis;
+        $config = app('config');
+        $host = $config->get('databases.redis.host');
+        $port = $config->get('databases.redis.port');
+        $this->redis->pconnect($host, $port);
     }
     public function onWorkerStop(SwooleServer $server, int $worker_id)
     {

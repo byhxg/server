@@ -34,7 +34,10 @@ class Route extends Server
     {
         //多个进程不能公用一个链接
         $this->redis = new \Redis;
-        $this->redis->pconnect("192.160.2.205", 6379);
+        $config = app('config');
+        $host = $config->get('databases.redis.host');
+        $port = $config->get('databases.redis.port');
+        $this->redis->pconnect($host, $port);
     }
 
     public function onOpen(SwooleServer $server, $request)

@@ -131,7 +131,7 @@ class Route
     {
         foreach ($this->routeMap as $key => $path) {
             $this->flag = $key;
-            require_once APP_PATH.$path;
+            require_once \APP_PATH.$path;
         }
         return $this;
     }
