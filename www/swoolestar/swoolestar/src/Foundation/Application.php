@@ -42,8 +42,8 @@ class Application extends Container
         //
         // // php bin/swostar ws:start
         // $server = new WebSocketServer($this);
-        //
-        $server->watchFile(true);
+        //不更新
+        $server->watchFile(0);
         $server->start();
     }
 
