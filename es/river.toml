@@ -1,0 +1,42 @@
+#  MySQL 配置：地址，用户名，密码
+my_addr = "192.168.169.110:3306"
+my_user = "root"
+my_pass = "0000"
+
+# Elasticsearch地址
+es_addr = "192.168.169.120:9212"
+
+# 存储数据的位置
+data_dir = "/var"
+
+# Inner Http status address
+stat_addr = "192.168.169.120:12800"
+stat_path = "/es"
+# pseudo server id like a slave
+server_id = 1001
+# mysql or mariadb
+flavor = "mysql"
+# mysqldump execution path
+# mysqldump = "mysqldump"
+# minimal items to be inserted in one bulk
+bulk_size = 128
+
+# force flush the pending requests if we don't have enough items >= bulk_size
+flush_bulk_time = "200ms"
+
+# Ignore table without primary key
+skip_no_pk_table = false
+
+# elasticsearch 与 mysql 同步时对应的数据库名称
+# mysql的数据源
+[[source]]
+schema = "srm"
+tables = ["goods"]
+
+# es 映射的mapping
+[[rule]]
+schema = "srm"
+table = "goods"
+# es的索引名
+index = "srm_goods"
+type = "link_info"

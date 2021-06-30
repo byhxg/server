@@ -1,0 +1,43 @@
+# MySQL 配置：地址，用户名，密码
+my_addr = "192.168.169.110:3306"
+my_user = "root"
+my_pass = "0000"
+
+# Elasticsearch地址
+es_addr = "192.168.169.120:9210"
+
+# 存储数据的位置
+data_dir = "/var"
+
+# Inner Http status address
+stat_addr = "192.168.169.120:12800"
+stat_path = "/es"
+# pseudo server id like a slave
+server_id = 1001
+
+# mysql or mariadb
+flavor = "mysql"
+
+# mysql备份文件，如果不设置或设置为空，则跳过
+# mysqldump = "mysqldump"
+
+# minimal items to be inserted in one bulk
+bulk_size = 128
+
+# force flush the pending requests if we don't have enough items >= bulk_size
+flush_bulk_time = "200ms"
+
+# Ignore table without primary key
+skip_no_pk_table = false
+
+# MySQL数据源，schema：数据库，tables：表
+[[source]]
+schema = "srm"
+tables = ["goods"]
+
+# 映射到es
+[[rule]]
+schema = "srm"
+table = "goods"
+index = "srm_goods"
+type = "link_info"

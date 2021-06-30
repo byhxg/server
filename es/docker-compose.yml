@@ -1,85 +1,77 @@
 version: '3.6'
 services:
-  elasticsearch_n0:
-    image: elasticsearch:6.6.2
-    container_name: elasticsearch_n0
+  elasticsearch_m10:
+    image: elasticsearch:7.6.1
+    container_name: elasticsearch_m10
     privileged: true
     environment:
-      - cluster.name=elasticsearch-cluster
-      - node.name=node0
-      - node.master=true
-      - node.data=true
-      - bootstrap.memory_lock=true
-      - http.cors.enabled=true
-      - http.cors.allow-origin=*
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - "discovery.zen.ping.unicast.hosts=elasticsearch_n0,elasticsearch_n1,elasticsearch_n2"
-      - "discovery.zen.minimum_master_nodes=2"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
     volumes:
-      - ./data/node0:/usr/share/elasticsearch/data
-      - ./logs/node0:/usr/share/elasticsearch/logs
+      - ./master_10/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./master_10/data:/usr/share/elasticsearch/data
     ports:
-      - 9200:9200
-  elasticsearch_n1:
-    image: elasticsearch:6.6.2
-    container_name: elasticsearch_n1
+      - 9210:9200
+      - 9310:9300
+    networks:
+      es:
+        ipv4_address: 192.160.1.70
+
+
+  elasticsearch_s11:
+    image: elasticsearch:7.6.1
+    container_name: elasticsearch_s11
     privileged: true
     environment:
-      - cluster.name=elasticsearch-cluster
-      - node.name=node1
-      - node.master=true
-      - node.data=true
-      - bootstrap.memory_lock=true
-      - http.cors.enabled=true
-      - http.cors.allow-origin=*
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - "discovery.zen.ping.unicast.hosts=elasticsearch_n0,elasticsearch_n1,elasticsearch_n2"
-      - "discovery.zen.minimum_master_nodes=2"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
     volumes:
-      - ./data/node1:/usr/share/elasticsearch/data
-      - ./logs/node1:/usr/share/elasticsearch/logs
+      - ./slave_11/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./slave_11/data:/usr/share/elasticsearch/data
     ports:
-      - 9201:9200
-  elasticsearch_n2:
-    image: elasticsearch:6.6.2
-    container_name: elasticsearch_n2
+      - 9211:9200
+      - 9311:9300
+    networks:
+      es:
+        ipv4_address: 192.160.1.71
+
+  elasticsearch_s12:
+    image: elasticsearch:7.6.1
+    container_name: elasticsearch_s12
     privileged: true
     environment:
-      - cluster.name=elasticsearch-cluster
-      - node.name=node2
-      - node.master=true
-      - node.data=true
-      - bootstrap.memory_lock=true
-      - http.cors.enabled=true
-      - http.cors.allow-origin=*
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - "discovery.zen.ping.unicast.hosts=elasticsearch_n0,elasticsearch_n1,elasticsearch_n2"
-      - "discovery.zen.minimum_master_nodes=2"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
     volumes:
-      - ./data/node2:/usr/share/elasticsearch/data
-      - ./logs/node2:/usr/share/elasticsearch/logs
+      - ./slave_12/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./slave_12/data:/usr/share/elasticsearch/data
     ports:
-      - 9202:9200
+      - 9212:9200
+      - 9312:9300
+    networks:
+      es:
+        ipv4_address: 192.160.1.72
+
   kibana:
-    image: docker.elastic.co/elastic/kibana:6.6.2
+    image: kibana:7.6.1
     container_name: kibana
     environment:
-      - SERVER_NAME=kibana
-      - ELASTICSEARCH_URL=http://elasticsearch_n0:9200
-      - XPACK_MONITORING_ENABLED=true
+      - "ELASTICSEARCH_HOSTS=http://192.160.1.72:9200"
+      - "SERVER_PORT=5601"
+      - "SERVER_HOST=0.0.0.0"
     ports:
       - 5601:5601
-    depends_on:
-      - elasticsearch_n0
+    networks:
+      es:
+        ipv4_address: 192.160.1.73
+
+networks:
+#  es:
+#    driver: bridge
+#    ipam:
+#      config:
+#        - subnet: "192.160.1.0/16"
+  es:
+    #    driver: bridge
+    #    ipam: #定义网段
+    #      config:
+    #        - subnet: "192.160.1.0/16"
+    external:
+      name: redis5sm
