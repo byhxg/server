@@ -86,3 +86,4 @@ index = "xiu_user"
 2.2执行同步操作
 cd $GOPATH/src/github.com/siddontang/go-mysql-elasticsearch
 ./bin/go-mysql-elasticsearch -config=./etc/river.toml
+
