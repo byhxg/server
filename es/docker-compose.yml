@@ -53,7 +53,7 @@ services:
     image: kibana:7.6.1
     container_name: kibana
     environment:
-      - "ELASTICSEARCH_HOSTS=http://192.160.1.72:9200"
+      - "ELASTICSEARCH_HOSTS=http://192.160.1.70:9200"
       - "SERVER_PORT=5601"
       - "SERVER_HOST=0.0.0.0"
     ports:
