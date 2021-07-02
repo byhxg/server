@@ -2,7 +2,7 @@
 my_addr = "vmhost:3307"
 my_user = "root"
 my_pass = "123456"
-my_charset = "utf8"
+#my_charset = "utf8"
 
 # Elasticsearch地址
 es_addr = "vmhost:9212"
@@ -43,15 +43,8 @@ tables = ["user_base_info_[0-9]{2}"]
 # es 映射的mapping
 [[rule]]
 schema = "xiu_user"
-
-# 数据库表名精准配置方式
-# tables = ["goods"]
-# 数据库表名正则匹配方式
-tables = ["user_base_info_[0-9]{2}"]
+table = "user_base_info_[0-9]{2}"
 
 # es的索引名
 index = "user_base_info"
 type = "link_info"
-
-
-
