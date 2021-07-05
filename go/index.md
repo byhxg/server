@@ -23,6 +23,7 @@
 1. go-mysql-elasticsearch 插件安装
 步骤1：安装go
 yum install go
+go env -w GOPROXY=https://goproxy.cn
 
 步骤2：安装godep
 go get github.com/tools/godep
