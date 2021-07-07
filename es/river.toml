@@ -2,14 +2,14 @@
 my_addr = "vmhost:3307"
 my_user = "root"
 my_pass = "123456"
-#my_charset = "utf8"
+my_charset = "utf8"
 
 # Elasticsearch地址
-es_addr = "vmhost:9212"
+es_addr = "vmhost:9210"
 es_user = ""
 es_pass = ""
 
-# 存储数据的位置
+# 存储数据的位置（如果binlog偏移不一致导致同步失败时根据当时相关偏移进行调整即可、/var/master.info）
 data_dir = "/var"
 
 # Inner Http status address
@@ -22,10 +22,11 @@ flavor = "mysql"
 # mysqldump execution path
 # mysqldump = "mysqldump"
 # minimal items to be inserted in one bulk
-bulk_size = 128
+bulk_size = 1024
 
 # force flush the pending requests if we don't have enough items >= bulk_size
 flush_bulk_time = "200ms"
+
 
 # Ignore table without primary key
 skip_no_pk_table = false
